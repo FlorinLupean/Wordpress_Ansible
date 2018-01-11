@@ -1,0 +1,34 @@
+--- 
+- name: Install mysql
+  package:
+    name: mysql-server
+    state: latest
+  when: ansible_distribution == 'CentOS'
+- name: Copy cnf file
+  template:
+    src: my.cnf.j2
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: 0600
+  when: ansible_distribution == 'CentOS'
+  notify:
+      - enable and start mysql service
+        #- name: Import ansible database
+        #mysql_db:
+        #name: Ansible
+        #state: import
+        #target: /home/ansible/mysqldump/Ansible.sql
+        #when: ansible_distribution == 'CentOS'
+- name: create a new database with name 'wordpress'
+  mysql_db:
+    name: wordpress
+    state: present
+- name: create a new user with name 'wordpress'
+  mysql_user:
+    name: wordpress
+    password: wordpress
+    host: localhost
+    priv: '*.*:ALL'
+    state: present
+             

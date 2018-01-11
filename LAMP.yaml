@@ -1,0 +1,11 @@
+--- #Install mysql, enable it and then import database from dump
+- hosts: centos2
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  gather_facts: yes
+  connection: ssh
+  roles:
+     - mysql
+     - apache
+     - wordpress

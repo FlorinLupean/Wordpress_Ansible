@@ -1,0 +1,29 @@
+--- 
+- name: Install Apache
+  package:
+    name: httpd
+    state: latest
+  when: ansible_distribution == 'CentOS'
+
+- name: Copy virtualhost content
+  copy:
+    src: virtualhost.conf
+    dest: "/etc/httpd/sites-available/awordpress.flo.conf"
+  when: ansible_distribution == 'CentOS'
+  notify: 
+      - enable and start httpd service
+  when: ansible_distribution == 'CentOS'
+
+- name: Install Apache
+  package:
+    name: apache2
+    state: latest
+  when: ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+  
+- name: Copy virtualhost content
+  copy:
+    src: virtualhost.conf
+    dest: "/etc/apache2/sites-available/awordpress.flo.conf"
+  notify:
+      - enable and start apache2 service
+  when: ansible_distribution == 'Ubuntu'
